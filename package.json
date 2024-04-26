@@ -15,6 +15,8 @@
     "test:api-gateway": "cd api-gateway && yarn test",
     "test:tickets": "cd microservices/tickets-svc && yarn test",
     "test:users": "cd microservices/users-svc && yarn test",
+    "db:migrate": "prisma migrate dev --skip-generate",
+    "db:generate": "prisma generate",
     "dev": "concurrently \"yarn dev:api-gateway\" \"yarn dev:tickets\" \"yarn dev:users\"",
     "build": "concurrently \"yarn build:api-gateway\" \"yarn build:tickets\" \"yarn build:users\"",
     "start": "concurrently \"yarn start:api-gateway\" \"yarn start:tickets\" \"yarn start:users\"",
@@ -32,5 +34,9 @@
   "homepage": "https://github.com/fllaa/scrum-ticket-vokraf#readme",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "prisma": "^5.13.0"
   }
 }

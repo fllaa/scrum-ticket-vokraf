@@ -3,7 +3,22 @@
   "version": "0.0.1",
   "description": "Scrum Ticket Vokraf NestJS + gRPC",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:api-gateway": "cd api-gateway && yarn start:dev",
+    "dev:tickets": "cd microservices/tickets-svc && yarn start:dev",
+    "dev:users": "cd microservices/users-svc && yarn start:dev",
+    "build:api-gateway": "cd api-gateway && yarn build",
+    "build:tickets": "cd microservices/tickets-svc && yarn build",
+    "build:users": "cd microservices/users-svc && yarn build",
+    "start:api-gateway": "cd api-gateway && yarn start",
+    "start:tickets": "cd microservices/tickets-svc && yarn start",
+    "start:users": "cd microservices/users-svc && yarn start",
+    "test:api-gateway": "cd api-gateway && yarn test",
+    "test:tickets": "cd microservices/tickets-svc && yarn test",
+    "test:users": "cd microservices/users-svc && yarn test",
+    "dev": "concurrently \"yarn dev:api-gateway\" \"yarn dev:tickets\" \"yarn dev:users\"",
+    "build": "concurrently \"yarn build:api-gateway\" \"yarn build:tickets\" \"yarn build:users\"",
+    "start": "concurrently \"yarn start:api-gateway\" \"yarn start:tickets\" \"yarn start:users\"",
+    "test": "concurrently \"yarn test:api-gateway\" \"yarn test:tickets\" \"yarn test:users\""
   },
   "repository": {
     "type": "git",
@@ -14,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/fllaa/scrum-ticket-vokraf/issues"
   },
-  "homepage": "https://github.com/fllaa/scrum-ticket-vokraf#readme"
+  "homepage": "https://github.com/fllaa/scrum-ticket-vokraf#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

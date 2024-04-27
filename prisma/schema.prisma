@@ -21,15 +21,16 @@ enum Status {
 }
 
 model User {
-  id             String           @id @default(cuid())
-  email          String           @unique
-  name           String?
-  password       String
-  avatar         String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  tickets        Ticket[]
+  id              String           @id @default(cuid())
+  email           String           @unique
+  name            String?
+  password        String
+  avatar          String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  tickets         Ticket[]
   assignedTickets AssigneeTicket[]
+  ticketHistories   TicketHistory[]
 }
 
 model AssigneeTicket {
@@ -49,4 +50,19 @@ model Ticket {
   title       String
   description String
   status      Status
+  points      Int
+  histories   TicketHistory[]
+  dueDate     DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model TicketHistory {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  createdAt DateTime @default(now())
 }

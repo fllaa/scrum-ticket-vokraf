@@ -15,12 +15,14 @@
     "test:api-gateway": "cd api-gateway && yarn test",
     "test:tickets": "cd microservices/tickets-svc && yarn test",
     "test:users": "cd microservices/users-svc && yarn test",
+    "db:generate:tickets": "cd microservices/tickets-svc && yarn prisma generate --schema=./../../prisma/schema.prisma --generator ticketClient",
+    "db:generate:users": "cd microservices/users-svc && yarn prisma generate --schema=./../../prisma/schema.prisma --generator userClient",
     "db:migrate": "prisma migrate dev --skip-generate",
-    "db:generate": "prisma generate",
+    "db:generate": "yarn db:generate:tickets && yarn db:generate",
     "dev": "concurrently \"yarn dev:api-gateway\" \"yarn dev:tickets\" \"yarn dev:users\"",
-    "build": "concurrently \"yarn build:api-gateway\" \"yarn build:tickets\" \"yarn build:users\"",
     "start": "concurrently \"yarn start:api-gateway\" \"yarn start:tickets\" \"yarn start:users\"",
-    "test": "concurrently \"yarn test:api-gateway\" \"yarn test:tickets\" \"yarn test:users\""
+    "build": "yarn build:api-gateway && yarn build:tickets && yarn build:users",
+    "test": "yarn test:api-gateway && yarn test:tickets && yarn test:users"
   },
   "repository": {
     "type": "git",

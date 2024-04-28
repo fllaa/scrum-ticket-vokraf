@@ -8,6 +8,21 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator authClient {
+  provider = "prisma-client-js"
+  output   = "../microservices/auth-svc/node_modules/.prisma/client"
+}
+
+generator userClient {
+  provider = "prisma-client-js"
+  output   = "../microservices/users-svc/node_modules/.prisma/client"
+}
+
+generator ticketClient {
+  provider = "prisma-client-js"
+  output   = "../microservices/tickets-svc/node_modules/.prisma/client"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")

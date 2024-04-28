@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc Create(CreateUserPayload) returns (GetUser);
+  rpc Get(UserById) returns (GetUser);
+  rpc Delete(UserById) returns (GetUser);
+}
+
+message CreateUserPayload {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+  optional string avatar = 4;
+}
+
+message UserById {
+  string id = 1;
+}
+
+message GetUser {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  optional string avatar = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}

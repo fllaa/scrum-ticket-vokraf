@@ -1,21 +1,46 @@
-// TODO: Implement the UserService class
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '../../common/database/database.service';
 
-import { IUserService } from 'src/user/interfaces/user.service.interface';
+import type { UserCreateDto } from 'src/user/dtos/user.create.dto';
+import type { IUserService } from 'src/user/interfaces/user.service.interface';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService implements IUserService {
-  async create(data: any): Promise<any> {
-    return null;
+  constructor(private databaseService: DatabaseService) {}
+
+  async create(data: UserCreateDto) {
+    const user = await this.databaseService.user.create({
+      data,
+    });
+    return user;
   }
 
-  async get(id: string): Promise<any> {
-    return null;
+  async get(id: string) {
+    const user = await this.databaseService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return user;
   }
 
-  async delete(id: string): Promise<any> {
-    return null;
+  async delete(id: string) {
+    try {
+      const user = await this.databaseService.user.delete({
+        where: {
+          id,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          return null;
+        }
+      }
+    }
   }
 }

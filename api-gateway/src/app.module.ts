@@ -4,11 +4,13 @@ import { ConfigModule } from '@nestjs/config';
 import { GrpcServerExceptionFilter } from '@flla/nestjs-grpc-exceptions';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/user/user.module';
 import configs from 'src/configs';
 
 @Module({
   imports: [
+    AuthModule,
     ConfigModule.forRoot({
       load: configs,
       isGlobal: true,

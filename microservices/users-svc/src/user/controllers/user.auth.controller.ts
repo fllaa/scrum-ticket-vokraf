@@ -1,44 +1,45 @@
 import { Controller, Inject } from '@nestjs/common';
-import { GrpcMethod, RpcException } from '@nestjs/microservices';
-import { UserService } from 'src/user/services/user.service';
+import { GrpcMethod } from '@nestjs/microservices';
+import {
+  GrpcAlreadyExistsException,
+  GrpcUnauthenticatedException,
+} from '@flla/nestjs-grpc-exceptions';
+import { Prisma } from '@prisma/client';
+import { UserAuthService } from 'src/user/services/user.auth.service';
+import { UserAuthSerialization } from 'src/user/serializations/user.auth.serialization';
 
-import type { UserCreateDto } from 'src/user/dtos/user.create.dto';
-import { UserGetSerialization } from 'src/user/serializations/user.get.serialization';
+import type { UserLoginDto } from 'src/user/dtos/user.login.dto';
+import type { UserRegisterDto } from 'src/user/dtos/user.register.dto';
 
 @Controller()
 export class UserAuthController {
-  constructor(@Inject(UserService) private readonly userService: UserService) {}
+  constructor(
+    @Inject(UserAuthService) private readonly userAuthService: UserAuthService,
+  ) {}
 
-  @GrpcMethod('UserService', 'Create')
-  create(data: UserCreateDto): Promise<UserGetSerialization> {
-    return this.userService.create(data);
-  }
+  @GrpcMethod('UserService', 'Login')
+  async login(data: UserLoginDto): Promise<UserAuthSerialization> {
+    const result = this.userAuthService.login(data);
 
-  @GrpcMethod('UserService', 'Get')
-  async get({ id }: { id: string }): Promise<UserGetSerialization> {
-    const user = await this.userService.get(id);
-
-    if (!user) {
-      throw new RpcException({
-        code: 404,
-        message: 'User not found',
-      });
+    if (!result) {
+      throw new GrpcUnauthenticatedException('Email or password is incorrect');
     }
 
-    return user;
+    return result;
   }
 
-  @GrpcMethod('UserService', 'Delete')
-  async delete({ id }: { id: string }): Promise<UserGetSerialization> {
-    const user = await this.userService.delete(id);
+  @GrpcMethod('UserService', 'Register')
+  async register(data: UserRegisterDto): Promise<UserAuthSerialization> {
+    try {
+      const result = await this.userAuthService.register(data);
 
-    if (!user) {
-      throw new RpcException({
-        code: 404,
-        message: 'User not found',
-      });
+      return result;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new GrpcAlreadyExistsException('Email already exists');
+        }
+      }
     }
-
-    return user;
   }
 }

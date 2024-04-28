@@ -6,6 +6,8 @@ service UserService {
   rpc Create(CreateUserPayload) returns (GetUser);
   rpc Get(UserById) returns (GetUser);
   rpc Delete(UserById) returns (GetUser);
+  rpc Login(LoginPayload) returns (AuthUser);
+  rpc Register(CreateUserPayload) returns (AuthUser);
 }
 
 message CreateUserPayload {
@@ -26,4 +28,13 @@ message GetUser {
   optional string avatar = 4;
   string created_at = 5;
   string updated_at = 6;
+}
+
+message LoginPayload {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthUser {
+  string access_token = 1;
 }

@@ -252,6 +252,7 @@ export class TicketService implements ITicketService {
         title: data.title,
         description: data.description,
         points: data.points,
+        status: data.status as TICKET_STATUS_ENUM,
         dueDate: data.dueDate,
       },
     });

@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsDateString,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -24,6 +25,7 @@ export class TicketUpdateApiDto {
   readonly points?: number;
 
   @IsString()
+  @IsEnum(['TODO', 'IN_PROGRESS', 'IN_REVIEW', 'DONE'])
   @IsOptional()
   @Type(() => String)
   readonly status?: string;

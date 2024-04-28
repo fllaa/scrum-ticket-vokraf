@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package ticket;
+
+service TicketService {
+  rpc Create(CreateTicketPayload) returns (Ticket);
+  rpc Get(TicketById) returns (Ticket);
+  rpc ListByUser(UserId) returns (ListTicket);
+  rpc Summary(UserId) returns (SummaryTicket);
+  rpc Performance(UserId) returns (PerformanceTicket);
+  rpc Update(UpdateTicketPayload) returns (Ticket);
+  rpc AddAssignee(AssigneeId) returns (Ticket);
+  rpc ChangeAssignee(ChangeAssigneeId) returns (Ticket);
+  rpc RemoveAssignee(AssigneeId) returns (Ticket);
+  rpc Delete(TicketById) returns (Ticket);
+}
+
+message TicketById {
+  string id = 1;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string avatar = 4;
+}
+
+message TicketHistory {
+  string id = 1;
+  string title = 2;
+  User user = 3;
+  string created_at = 4;
+}
+
+message TicketItem {
+  string id = 1;
+  string title = 2;
+  string status = 3;
+  int32 points = 4;
+  string due_date = 5;
+}
+
+message Ticket {
+  string id = 1;
+  User creator = 2;
+  repeated User assignees = 3;
+  repeated TicketHistory histories = 4;
+  string title = 5;
+  string description = 6;
+  string status = 7;
+  int32 points = 8;
+  string due_date = 9;
+  string created_at = 10;
+  string updated_at = 11;
+}
+
+message ListTicket {
+  repeated TicketItem data = 1;
+}
+
+message CreateTicketPayload {
+  string title = 1;
+  optional string description = 2;
+  int32 points = 3;
+  string due_date = 4;
+  string creator_id = 5;
+}
+
+message UserId {
+  string user_id = 1;
+}
+
+message TotalSummary {
+  int32 total_tasks = 1;
+  int32 total_points = 2;
+}
+
+message SummaryTicket {
+  TotalSummary total = 1;
+  TotalSummary todo = 2;
+  TotalSummary in_progress = 3;
+  TotalSummary in_review = 4;
+  TotalSummary done = 5;
+}
+
+message PerformanceTicket {
+  int32 completed_tasks = 1;
+  int32 un_completed_tasks = 2;
+  int32 total_tasks = 3;
+  string completed_tasks_percentage = 4;
+  int32 completed_points = 5;
+  int32 un_completed_points = 6;
+  int32 total_points = 7;
+  string completed_points_percentage = 8;
+}
+
+message UpdateTicketPayload {
+  string id = 1;
+  string user_id = 2;
+  optional string title = 3;
+  optional string description = 4;
+  optional int32 points = 5;
+  optional string due_date = 6;
+  optional string status = 7;
+}
+
+message AssigneeId {
+  string id = 1;
+  string user_id = 2;
+  string assignee_id = 3;
+}
+
+message ChangeAssigneeId {
+  string id = 1;
+  string user_id = 2;
+  string old_assignee_id = 3;
+  string new_assignee_id = 4;
+}

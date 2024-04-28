@@ -51,8 +51,8 @@ model User {
 model AssigneeTicket {
   assigneeId String
   ticketId   String
-  assignee   User   @relation(fields: [assigneeId], references: [id])
-  ticket     Ticket @relation(fields: [ticketId], references: [id])
+  assignee   User   @relation(fields: [assigneeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ticket     Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([assigneeId, ticketId])
 }
@@ -60,7 +60,7 @@ model AssigneeTicket {
 model Ticket {
   id          String           @id @default(cuid())
   creatorId   String
-  creator     User             @relation(fields: [creatorId], references: [id])
+  creator     User             @relation(fields: [creatorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   assignees   AssigneeTicket[]
   title       String
   description String
@@ -75,9 +75,9 @@ model Ticket {
 model TicketHistory {
   id        String   @id @default(cuid())
   ticketId  String
-  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   title     String
   createdAt DateTime @default(now())
 }

@@ -19,7 +19,7 @@ export class UserAuthController {
 
   @GrpcMethod('UserService', 'Login')
   async login(data: UserLoginDto): Promise<UserAuthSerialization> {
-    const result = this.userAuthService.login(data);
+    const result = await this.userAuthService.login(data);
 
     if (!result) {
       throw new GrpcUnauthenticatedException('Email or password is incorrect');
